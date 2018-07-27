@@ -11,7 +11,6 @@ public class Dashboard {
 
     private final TransactionService transactionService;
 
-
     public Dashboard(TransactionService transactionService) {
         this.transactionService = transactionService;
 
@@ -40,6 +39,7 @@ public class Dashboard {
             SalesStatistics statistics = transactionService.calculateSalesStatistics();
 
             res.status(200);
+            res.type("application/json");
             return new StatisticsResponse(statistics.getTotalSales(), statistics.getOrderAverage());
         }, asJson());
     }

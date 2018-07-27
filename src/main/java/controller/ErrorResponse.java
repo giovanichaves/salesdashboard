@@ -1,9 +1,9 @@
 package controller;
 
 public class ErrorResponse {
-    private String message;
+    private String errorMessage;
 
     public ErrorResponse(String message) {
-        this.message = message;
+        this.errorMessage = message;
     }
 }
