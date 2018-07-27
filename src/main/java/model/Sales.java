@@ -14,7 +14,7 @@ public class Sales {
     public Sales() {
         LocalDateTime now = LocalDateTime.now();
         for (int second = 0; second < 60; second++) {
-            lastMinuteSales.put(second, new SalesAmountBucket(now.plusSeconds(second).truncatedTo(SECONDS)));
+            lastMinuteSales.put(second, new SalesAmountBucket(second, now.plusSeconds(second).truncatedTo(SECONDS)));
         }
     }
 
