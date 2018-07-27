@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class SalesAmountBucket {
 
@@ -12,14 +13,18 @@ public class SalesAmountBucket {
     private int totalOrders = 0;
 
     public SalesAmountBucket(LocalDateTime timerStart) {
-        TimerTask reset = new TimerTask() {
+        TimerTask resetTask = new TimerTask() {
             @Override
             public void run() {
                 resetSalesAmount();
             }
         };
 
-        new Timer().scheduleAtFixedRate(reset, Date.from(timerStart.atZone(ZoneId.systemDefault()).toInstant()), 60);
+        new Timer().scheduleAtFixedRate(
+                resetTask,
+                Date.from(timerStart.atZone(ZoneId.systemDefault()).toInstant()),
+                TimeUnit.SECONDS.toMillis(60)
+        );
     }
 
     public SalesAmountBucket addSalesAmount(float salesAmount) {
