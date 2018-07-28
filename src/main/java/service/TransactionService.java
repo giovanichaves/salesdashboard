@@ -17,15 +17,7 @@ public class TransactionService {
                 .compute(timeProvider.now().getSecond(), (second, bucket) -> bucket.addSalesAmount(salesAmount));
     }
 
-    public SalesStatistics calculateSalesStatistics() {
-        float totalSales = 0;
-        int totalOrders = 0;
-
-        for (SalesAmountBucket bucket : sales.getLastMinuteSales().values()) {
-            totalSales += bucket.getTotalSales();
-            totalOrders += bucket.getTotalOrders();
-        }
-
-        return new SalesStatistics(totalSales, totalOrders);
+    public SalesStatistics getSalesStatistics() {
+        return new SalesStatistics(sales.getTotalSales(), sales.getTotalOrders());
     }
 }
