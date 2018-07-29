@@ -23,6 +23,7 @@ public class SalesService {
         TimerTask resetTask = new TimerTask() {
             @Override
             public void run() {
+                System.out.println("flush at "+timeProvider.now());
                 flushSecondBucket(sales, timeProvider.now().getSecond());
             }
         };
@@ -35,7 +36,7 @@ public class SalesService {
     }
 
 
-    public synchronized static void flushSecondBucket(Sales sales, int second) {
+    public static void flushSecondBucket(Sales sales, int second) {
         sales.getLastMinuteSales().compute(second, (i, bucket) -> {
             System.out.println("flush #"+i);
             System.out.println("bTotal "+bucket.getSalesSum() + " bQty "+bucket.getOrdersQty());

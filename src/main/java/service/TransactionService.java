@@ -17,7 +17,6 @@ public class TransactionService {
 
     public void storeSales(double salesAmount) {
         sales.addSecondSales(salesAmount);
-//                .compute(timeProvider.now().getSecond(), (second, bucket) -> addSalesAmount(bucket, salesAmount));
     }
 
     public SalesStatistics getSalesStatistics() {

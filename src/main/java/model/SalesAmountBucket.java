@@ -9,7 +9,7 @@ public class SalesAmountBucket {
         ordersQty = 0;
     }
 
-    public void addSalesAmount(double salesAmount) {
+    public synchronized void addSalesAmount(double salesAmount) {
         this.salesSum += salesAmount;
         this.ordersQty++;
     }
