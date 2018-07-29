@@ -1,6 +1,6 @@
 package controller;
 
-import service.SalesStatistics;
+import model.SalesStatistics;
 import service.TransactionService;
 
 import static spark.Spark.get;
@@ -29,7 +29,7 @@ public class DashboardController {
                 return toJson(new ErrorResponse("sales_amount parameter is required!"));
             }
 
-            transactionService.storeSales(Float.parseFloat(salesAmountParam));
+            transactionService.storeSales(Double.parseDouble(salesAmountParam));
             res.status(202);
             return "";
         });
@@ -41,7 +41,7 @@ public class DashboardController {
 
             res.status(200);
             res.type("application/json");
-            return new StatisticsResponse(statistics.getTotalSales(), statistics.getOrderAverage());
+            return new StatisticsResponse(statistics.getTotalSales(), statistics.getOrderAverage(), statistics.getQty());
         }, asJson());
     }
 

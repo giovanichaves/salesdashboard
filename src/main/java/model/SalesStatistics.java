@@ -1,24 +1,23 @@
-package service;
+package model;
 
 public class SalesStatistics {
 
-    private float totalSales = 0;
+    private double totalSales = 0;
     private int totalOrders = 0;
 
-    public SalesStatistics(float totalSales, int totalOrders) {
+    public SalesStatistics(double totalSales, int totalOrders) {
         this.totalSales = totalSales;
         this.totalOrders = totalOrders;
     }
 
-    public float getTotalSales() {
+    public double getTotalSales() {
         return totalSales;
     }
 
-    public float getOrderAverage() {
+    public double getOrderAverage() {
         return totalOrders == 0 ? 0 : totalSales / totalOrders;
     }
 
-    public int getTotalOrders() {
-        return totalOrders;
-    }
+    public int getQty() { return totalOrders; }
+
 }

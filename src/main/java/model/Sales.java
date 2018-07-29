@@ -1,38 +1,31 @@
 package model;
 
-import service.SalesAmountBucket;
-
-import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class Sales {
 
-    private ConcurrentHashMap<Integer, SalesAmountBucket> lastMinuteSales = new ConcurrentHashMap<>();
-    private float totalSales = 0;
+    private ConcurrentHashMap<Integer, SalesAmountBucket> lastMinuteSales;
+    private volatile SalesAmountBucket lastSecondSales = new SalesAmountBucket();
+    private double totalSales = 0;
     private int totalOrders = 0;
 
-    public Sales() {
-        LocalDateTime now = LocalDateTime.now();
-        for (int second = 0; second < 60; second++) {
-            lastMinuteSales.put(second, new SalesAmountBucket(now.truncatedTo(MINUTES).plusSeconds(second), this));
-        }
+    public Sales(ConcurrentHashMap<Integer, SalesAmountBucket> minuteBuckets) {
+        this.lastMinuteSales = minuteBuckets;
     }
 
-    public ConcurrentHashMap<Integer, SalesAmountBucket> getLastMinuteSales() {
-        return lastMinuteSales;
+    public void addSecondSales(double salesAmount) {
+        lastSecondSales.addSalesAmount(salesAmount);
     }
 
-    public float getTotalSales() {
+    public double getTotalSales() {
         return totalSales;
     }
 
-    public synchronized void addTotalSales(float salesInBucket) {
+    public void addTotalSales(double salesInBucket) {
         totalSales += salesInBucket;
     }
 
-    public synchronized void subTotalSales(float salesInBucket) {
+    public void subTotalSales(double salesInBucket) {
         totalSales -= salesInBucket;
     }
 
@@ -40,11 +33,19 @@ public class Sales {
         return totalOrders;
     }
 
-    public synchronized void addTotalOrders() {
-        totalOrders++;
+    public void addTotalOrders(int ordersInBucket) {
+        totalOrders += ordersInBucket;
     }
 
-    public synchronized void subTotalOrders(int ordersInBucket) {
+    public void subTotalOrders(int ordersInBucket) {
         totalOrders -= ordersInBucket;
+    }
+
+    public ConcurrentHashMap<Integer, SalesAmountBucket> getLastMinuteSales() {
+        return lastMinuteSales;
+    }
+
+    public SalesAmountBucket getLastSecondSales() {
+        return lastSecondSales;
     }
 }
