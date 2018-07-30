@@ -4,14 +4,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Sales {
 
-    private ConcurrentHashMap<Integer, SalesAmountBucket> lastMinuteSales;
-    private SalesAmountBucket lastSecondSales;
+    private final ConcurrentHashMap<Integer, SalesAmountBucket> lastMinuteBuckets;
+    private final SalesAmountBucket lastSecondBucket;
     private double totalSales = 0;
     private int totalOrders = 0;
 
-    public Sales(ConcurrentHashMap<Integer, SalesAmountBucket> minuteBuckets, SalesAmountBucket lastSecondSales) {
-        this.lastMinuteSales = minuteBuckets;
-        this.lastSecondSales = lastSecondSales;
+    public Sales(ConcurrentHashMap<Integer, SalesAmountBucket> minuteBuckets, SalesAmountBucket lastSecondBucket) {
+        this.lastMinuteBuckets = minuteBuckets;
+        this.lastSecondBucket = lastSecondBucket;
     }
 
     public double getTotalSales() {
@@ -30,11 +30,11 @@ public class Sales {
         this.totalOrders = totalOrders;
     }
 
-    public ConcurrentHashMap<Integer, SalesAmountBucket> getLastMinuteSales() {
-        return lastMinuteSales;
+    public ConcurrentHashMap<Integer, SalesAmountBucket> getLastMinuteBuckets() {
+        return lastMinuteBuckets;
     }
 
-    public SalesAmountBucket getLastSecondSales() {
-        return lastSecondSales;
+    public SalesAmountBucket getLastSecondBucket() {
+        return lastSecondBucket;
     }
 }

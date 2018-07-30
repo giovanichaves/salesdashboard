@@ -1,7 +1,7 @@
 package controller;
 
 import model.SalesStatistics;
-import service.TransactionService;
+import service.SalesService;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -10,10 +10,10 @@ import static utils.JsonUtil.toJson;
 
 public class DashboardController {
 
-    private final TransactionService transactionService;
+    private final SalesService salesService;
 
-    public DashboardController(TransactionService transactionService) {
-        this.transactionService = transactionService;
+    public DashboardController(SalesService salesService) {
+        this.salesService = salesService;
 
         this.newSaleEndpoint();
         this.statisticsEndpoint();
@@ -38,7 +38,7 @@ public class DashboardController {
                 return toJson(new ErrorResponse("sales_amount must be a number"));
             }
 
-            transactionService.storeSales(salesAmount);
+            salesService.storeSales(salesAmount);
             res.status(202);
             return "";
         });
@@ -46,7 +46,7 @@ public class DashboardController {
 
     private void statisticsEndpoint() {
         get("/statistics", (req, res) -> {
-            SalesStatistics statistics = transactionService.getSalesStatistics();
+            SalesStatistics statistics = salesService.getSalesStatistics();
 
             res.status(200);
             res.type("application/json");

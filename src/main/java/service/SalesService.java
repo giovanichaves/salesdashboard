@@ -2,6 +2,7 @@ package service;
 
 import model.Sales;
 import model.SalesAmountBucket;
+import model.SalesStatistics;
 import utils.TimeProvider;
 
 import java.util.Timer;
@@ -11,6 +12,20 @@ import java.util.concurrent.TimeUnit;
 
 public class SalesService {
 
+    private final Sales sales;
+
+    public SalesService(Sales sales) {
+        this.sales = sales;
+    }
+
+    public void storeSales(double salesAmount) {
+        sales.getLastSecondBucket().addSalesAmount(salesAmount);
+    }
+
+    public SalesStatistics getSalesStatistics() {
+        return new SalesStatistics(sales.getTotalSales(), sales.getTotalOrders());
+    }
+
     public static ConcurrentHashMap<Integer, SalesAmountBucket> bucketsProvider() {
         ConcurrentHashMap<Integer, SalesAmountBucket> minuteBuckets = new ConcurrentHashMap<>();
         for (int second = 0; second < 60; second++) {
@@ -19,11 +34,11 @@ public class SalesService {
         return minuteBuckets;
     }
 
-    public static void startBucketsTimer(Sales sales, TimeProvider timeProvider) {
+    public void startBucketsTimer(TimeProvider timeProvider) {
         TimerTask resetTask = new TimerTask() {
             @Override
             public void run() {
-                flushSecondBucket(sales, timeProvider.now().getSecond());
+                flushLastSecondBucket(timeProvider.now().getSecond());
             }
         };
 
@@ -35,32 +50,32 @@ public class SalesService {
     }
 
 
-    public static void flushSecondBucket(Sales sales, int second) {
-        sales.getLastMinuteSales().compute(second, (i, secondBucket) -> {
+    public void flushLastSecondBucket(int second) {
+        sales.getLastMinuteBuckets().compute(second, (i, secondBucket) -> {
             //remove expired bucket amounts from totals
-            subBucketTotals(sales, secondBucket);
+            subBucketTotals(secondBucket);
 
             //replace expired bucket with new bucket
-            SalesAmountBucket lastSecondSales = sales.getLastSecondSales();
-            secondBucket.setBucket(lastSecondSales);
+            SalesAmountBucket lastSecondBucket = sales.getLastSecondBucket();
+            secondBucket.setBucket(lastSecondBucket);
 
             //insert new bucket amounts to totals
-            addBucketTotals(sales, lastSecondSales);
+            addBucketTotals(lastSecondBucket);
 
             //reset amounts from new bucket
-            lastSecondSales.resetBucket();
+            lastSecondBucket.resetBucket();
 
             //store new bucket
             return secondBucket;
         });
     }
 
-    public static void addBucketTotals(Sales sales, SalesAmountBucket bucket) {
+    public void addBucketTotals(SalesAmountBucket bucket) {
         sales.setTotalSales(sales.getTotalSales() + bucket.getSalesSum());
         sales.setTotalOrders(sales.getTotalOrders() + bucket.getOrdersQty());
     }
 
-    public static void subBucketTotals(Sales sales, SalesAmountBucket bucket) {
+    public void subBucketTotals(SalesAmountBucket bucket) {
         sales.setTotalSales(sales.getTotalSales() - bucket.getSalesSum());
         sales.setTotalOrders(sales.getTotalOrders() - bucket.getOrdersQty());
     }
