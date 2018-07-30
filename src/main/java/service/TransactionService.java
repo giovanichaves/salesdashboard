@@ -14,7 +14,7 @@ public class TransactionService {
     }
 
     public void storeSales(double salesAmount) {
-        sales.addSecondSales(salesAmount);
+        sales.getLastSecondSales().addSalesAmount(salesAmount);
     }
 
     public SalesStatistics getSalesStatistics() {

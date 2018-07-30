@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Sales {
 
     private ConcurrentHashMap<Integer, SalesAmountBucket> lastMinuteSales;
-    private volatile SalesAmountBucket lastSecondSales;
+    private SalesAmountBucket lastSecondSales;
     private double totalSales = 0;
     private int totalOrders = 0;
 
@@ -14,32 +14,20 @@ public class Sales {
         this.lastSecondSales = lastSecondSales;
     }
 
-    public void addSecondSales(double salesAmount) {
-        lastSecondSales.addSalesAmount(salesAmount);
-    }
-
     public double getTotalSales() {
         return totalSales;
     }
 
-    public void addTotalSales(double salesInBucket) {
-        totalSales += salesInBucket;
-    }
-
-    public void subTotalSales(double salesInBucket) {
-        totalSales -= salesInBucket;
+    public void setTotalSales(double totalSales) {
+        this.totalSales = totalSales;
     }
 
     public int getTotalOrders() {
         return totalOrders;
     }
 
-    public void addTotalOrders(int ordersInBucket) {
-        totalOrders += ordersInBucket;
-    }
-
-    public void subTotalOrders(int ordersInBucket) {
-        totalOrders -= ordersInBucket;
+    public void setTotalOrders(int totalOrders) {
+        this.totalOrders = totalOrders;
     }
 
     public ConcurrentHashMap<Integer, SalesAmountBucket> getLastMinuteSales() {

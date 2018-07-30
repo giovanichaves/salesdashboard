@@ -43,7 +43,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="sales_amount" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">12.50</stringProp>
+                <stringProp name="Argument.value">10.00</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">sales_amount</stringProp>
