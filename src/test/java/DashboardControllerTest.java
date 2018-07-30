@@ -35,6 +35,17 @@ public class DashboardControllerTest {
     }
 
     @Test
+    public void shouldReturnErrorWhenSalesAmountIsNaN() {
+        given()
+                .queryParam("sales_amount", "not-a-number")
+        .post("/sales").then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                .contentType(ContentType.JSON)
+                .body("errorMessage", equalTo("sales_amount must be a number"));
+    }
+
+    @Test
     public void shouldStoreTransactionAndStatusAcceptedWithEmptyBody() {
         given()
                 .queryParam("sales_amount", "10.00")

@@ -29,7 +29,16 @@ public class DashboardController {
                 return toJson(new ErrorResponse("sales_amount parameter is required!"));
             }
 
-            transactionService.storeSales(Double.parseDouble(salesAmountParam));
+            Double salesAmount;
+            try {
+                salesAmount = Double.parseDouble(salesAmountParam);
+            } catch(NumberFormatException e) {
+                res.status(400);
+                res.type("application/json");
+                return toJson(new ErrorResponse("sales_amount must be a number"));
+            }
+
+            transactionService.storeSales(salesAmount);
             res.status(202);
             return "";
         });
