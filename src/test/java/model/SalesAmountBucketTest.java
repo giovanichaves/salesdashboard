@@ -10,8 +10,8 @@ public class SalesAmountBucketTest {
 
     @Test
     public void testResetsTotals() {
-        salesAmountBucket.addSalesAmount(10.00);
-        salesAmountBucket.addSalesAmount(10.00);
+        salesAmountBucket.addSalesAmount(10);
+        salesAmountBucket.addSalesAmount(10);
 
         salesAmountBucket.resetBucket();
 
@@ -21,8 +21,8 @@ public class SalesAmountBucketTest {
 
     @Test
     public void testAddsSalesAmountAndIncrementsOrders() {
-        salesAmountBucket.addSalesAmount(10.00);
-        salesAmountBucket.addSalesAmount(10.00);
+        salesAmountBucket.addSalesAmount(10);
+        salesAmountBucket.addSalesAmount(10);
 
         assertThat(salesAmountBucket.getSalesSum(), equalTo(20.0));
         assertThat(salesAmountBucket.getOrdersQty(), equalTo(2));
@@ -31,9 +31,9 @@ public class SalesAmountBucketTest {
     @Test
     public void testSetsTotals() {
         SalesAmountBucket otherBucket = new SalesAmountBucket();
-        otherBucket.addSalesAmount(10.00);
-        otherBucket.addSalesAmount(15.00);
-        otherBucket.addSalesAmount(20.00);
+        otherBucket.addSalesAmount(10);
+        otherBucket.addSalesAmount(15);
+        otherBucket.addSalesAmount(20);
         salesAmountBucket.setBucket(otherBucket);
 
         assertThat(salesAmountBucket.getSalesSum(), equalTo(45.0));

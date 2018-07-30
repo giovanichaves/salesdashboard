@@ -5,8 +5,6 @@ import service.SalesService;
 import utils.TimeProvider;
 
 public class DashboardApplication {
-
-
     public static void main(String[] args) {
         SalesService salesService = new SalesService(
                 new Sales(
@@ -19,6 +17,4 @@ public class DashboardApplication {
 
         new DashboardController(salesService);
     }
-
-
 }
