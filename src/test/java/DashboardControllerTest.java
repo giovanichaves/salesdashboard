@@ -10,6 +10,7 @@ import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.isEmptyString;
 
 public class DashboardControllerTest {
 
@@ -26,26 +27,27 @@ public class DashboardControllerTest {
 
     @Test
     public void shouldReturnErrorWhenSalesParameterMissing() {
-        post("/sales")
-            .then().assertThat()
-            .statusCode(HttpStatus.SC_BAD_REQUEST)
-            .contentType(ContentType.JSON)
-            .body("errorMessage", equalTo("sales_amount parameter is required!"));
+        post("/sales").then()
+            .assertThat()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
+                .contentType(ContentType.JSON)
+                .body("errorMessage", equalTo("sales_amount parameter is required!"));
     }
 
     @Test
-    public void shouldStoreTransaction() {
+    public void shouldStoreTransactionAndStatusAcceptedWithEmptyBody() {
         given()
                 .queryParam("sales_amount", "10.00")
-        .post("/sales")
-                .then().assertThat()
-                .statusCode(HttpStatus.SC_ACCEPTED);
+        .post("/sales").then()
+            .assertThat()
+                .statusCode(HttpStatus.SC_ACCEPTED)
+                .body(isEmptyString());
     }
 
     @Test
     public void shouldReturnTotalSalesAndAverage() {
-        get("/statistics")
-                .then().assertThat()
+        get("/statistics").then()
+            .assertThat()
                 .statusCode(HttpStatus.SC_OK)
                 .contentType(ContentType.JSON)
                 .body("total_sales_amount", not(empty()))
