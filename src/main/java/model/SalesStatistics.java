@@ -18,6 +18,4 @@ public class SalesStatistics {
         return totalOrders == 0 ? 0 : totalSales / totalOrders;
     }
 
-    public int getQty() { return totalOrders; }
-
 }
