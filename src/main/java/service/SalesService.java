@@ -37,15 +37,22 @@ public class SalesService {
 
     public static void flushSecondBucket(Sales sales, int second) {
         sales.getLastMinuteSales().compute(second, (i, bucket) -> {
+            //remove expired bucket amounts from totals
             sales.subTotalSales(bucket.getSalesSum());
             sales.subTotalOrders(bucket.getOrdersQty());
 
-            bucket.setBucket(sales.getLastSecondSales());
+            //replace expired bucket with new bucket
+            SalesAmountBucket lastSecondSales = sales.getLastSecondSales();
+            bucket.setBucket(lastSecondSales);
 
-            sales.addTotalSales(sales.getLastSecondSales().getSalesSum());
-            sales.addTotalOrders(sales.getLastSecondSales().getOrdersQty());
+            //insert new bucket amounts to totals
+            sales.addTotalSales(lastSecondSales.getSalesSum());
+            sales.addTotalOrders(lastSecondSales.getOrdersQty());
 
-            sales.getLastSecondSales().resetSalesAmount();
+            //reset amounts from new bucket
+            lastSecondSales.resetBucket();
+
+            //store new bucket
             return bucket;
         });
     }
