@@ -9,4 +9,12 @@ public class StatisticsResponse {
         this.total_sales_amount = String.format("%.2f", total_sales_amount);
         this.average_amount_per_order = String.format("%.2f", average_amount_per_order);
     }
+
+    public String getTotal_sales_amount() {
+        return total_sales_amount;
+    }
+
+    public String getAverage_amount_per_order() {
+        return average_amount_per_order;
+    }
 }
