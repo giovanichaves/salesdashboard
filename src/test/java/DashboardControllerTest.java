@@ -1,20 +1,22 @@
-import org.apache.http.HttpResponse;
+import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.fluent.Request;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import spark.Spark;
 
-import java.io.IOException;
+import static com.jayway.restassured.RestAssured.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.empty;
 
-import static org.junit.Assert.assertEquals;
-
-class DashboardControllerTest {
+public class DashboardControllerTest {
 
     @BeforeClass
     public static void beforeClass() {
         DashboardApplication.main(null);
+        RestAssured.baseURI = "http://localhost:4567";
     }
 
     @AfterClass
@@ -23,11 +25,30 @@ class DashboardControllerTest {
     }
 
     @Test
-    public void shouldReturnErrorWhenSalesParameterMissing() throws IOException {
-        HttpResponse res = Request.Post("http://localhost:4567/sales").execute().returnResponse();
-
-        assertEquals(res.getStatusLine().getStatusCode(), HttpStatus.SC_BAD_REQUEST);
-//        assertEquals(res.getEntity()., "sales_amount parameter is required!");
+    public void shouldReturnErrorWhenSalesParameterMissing() {
+        post("/sales")
+            .then().assertThat()
+            .statusCode(HttpStatus.SC_BAD_REQUEST)
+            .contentType(ContentType.JSON)
+            .body("errorMessage", equalTo("sales_amount parameter is required!"));
     }
 
+    @Test
+    public void shouldStoreTransaction() {
+        given()
+                .queryParam("sales_amount", "10.00")
+        .post("/sales")
+                .then().assertThat()
+                .statusCode(HttpStatus.SC_ACCEPTED);
+    }
+
+    @Test
+    public void shouldReturnTotalSalesAndAverage() {
+        get("/statistics")
+                .then().assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .contentType(ContentType.JSON)
+                .body("total_sales_amount", not(empty()))
+                .body("average_amount_per_order", not(empty()));
+    }
 }
