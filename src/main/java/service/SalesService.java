@@ -55,17 +55,16 @@ public class SalesService {
             //remove expired bucket amounts from totals
             subBucketTotals(secondBucket);
 
-            //replace expired bucket with new bucket
+            //replace expired bucket with current bucket
             SalesAmountBucket lastSecondBucket = sales.getLastSecondBucket();
             secondBucket.setBucket(lastSecondBucket);
 
-            //insert new bucket amounts to totals
+            //insert current bucket amounts to totals
             addBucketTotals(lastSecondBucket);
 
-            //reset amounts from new bucket
+            //reset amounts on current bucket
             lastSecondBucket.resetBucket();
 
-            //store new bucket
             return secondBucket;
         });
     }
