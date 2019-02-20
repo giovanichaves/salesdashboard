@@ -7,7 +7,6 @@ import utils.TimeProvider;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class SalesService {
@@ -24,14 +23,6 @@ public class SalesService {
 
     public SalesStatistics getSalesStatistics() {
         return new SalesStatistics(sales.getTotalSales(), sales.getTotalOrders());
-    }
-
-    public static ConcurrentHashMap<Integer, SalesAmountBucket> bucketsProvider() {
-        ConcurrentHashMap<Integer, SalesAmountBucket> minuteBuckets = new ConcurrentHashMap<>();
-        for (int second = 0; second < 60; second++) {
-            minuteBuckets.put(second, new SalesAmountBucket());
-        }
-        return minuteBuckets;
     }
 
     public void startBucketsTimer(TimeProvider timeProvider) {
