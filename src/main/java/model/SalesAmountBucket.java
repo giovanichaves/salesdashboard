@@ -5,8 +5,12 @@ public class SalesAmountBucket {
     private int ordersQty = 0;
 
     public synchronized void addSalesAmount(double salesAmount) {
-        this.salesSum += salesAmount;
-        this.ordersQty++;
+
+        synchronized ("lastSecondBucket") {
+            this.salesSum += salesAmount;
+            this.ordersQty++;
+        }
+
     }
 
     public double getSalesSum() {

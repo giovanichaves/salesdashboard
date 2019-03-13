@@ -40,21 +40,22 @@ public class SalesService {
         );
     }
 
-
     public void flushLastSecondBucket(int second) {
         sales.getLastMinuteBuckets().compute(second, (i, secondBucket) -> {
             //remove expired bucket amounts from totals
             subBucketTotals(secondBucket);
 
             //replace expired bucket with current bucket
-            SalesAmountBucket lastSecondBucket = sales.getLastSecondBucket();
-            secondBucket.setBucket(lastSecondBucket);
+            synchronized ("lastSecondBucket") {
+                SalesAmountBucket lastSecondBucket = sales.getLastSecondBucket();
+                secondBucket.setBucket(lastSecondBucket);
 
-            //insert current bucket amounts to totals
-            addBucketTotals(lastSecondBucket);
+                //insert current bucket amounts to totals
+                addBucketTotals(lastSecondBucket);
 
-            //reset amounts on current bucket
-            lastSecondBucket.resetBucket();
+                //reset amounts on current bucket
+                lastSecondBucket.resetBucket();
+            }
 
             return secondBucket;
         });
