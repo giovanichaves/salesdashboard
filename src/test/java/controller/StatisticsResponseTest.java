@@ -11,8 +11,8 @@ public class StatisticsResponseTest {
     public void testNumbersFormat() {
         StatisticsResponse response = new StatisticsResponse(10, 5.25);
 
-        assertThat(response.getTotal_sales_amount(), equalTo("10.00"));
-        assertThat(response.getAverage_amount_per_order(), equalTo("5.25"));
+        assertThat(response.getTotal_sales_amount(), equalTo(10.0));
+        assertThat(response.getAverage_amount_per_order(), equalTo(5.25));
     }
 
 }
