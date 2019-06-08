@@ -1,12 +1,15 @@
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import spark.Spark;
 
-import static com.jayway.restassured.RestAssured.*;
+import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.post;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.empty;
