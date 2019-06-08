@@ -15,7 +15,7 @@ public class SalesServiceTest {
 
     @Test
     public void testProvides60Buckets() {
-        Map<Integer, SalesAmountBucket> minuteBuckets = SalesService.bucketsProvider();
+        Map<Integer, SalesAmountBucket> minuteBuckets = MinuteBucketsProvider.createBuckets();
         assertThat(minuteBuckets.size(), equalTo((int)TimeUnit.MINUTES.toSeconds(1)));
     }
 
@@ -52,7 +52,7 @@ public class SalesServiceTest {
 
     @Test
     public void testAddsBucketTotals() {
-        Sales sales = new Sales(SalesService.bucketsProvider(), new SalesAmountBucket());
+        Sales sales = new Sales(MinuteBucketsProvider.createBuckets(), new SalesAmountBucket());
         SalesService salesService = new SalesService(sales);
         SalesAmountBucket otherBucket = new SalesAmountBucket();
 
@@ -69,7 +69,7 @@ public class SalesServiceTest {
 
     @Test
     public void subBucket() {
-        Sales sales = new Sales(SalesService.bucketsProvider(), new SalesAmountBucket());
+        Sales sales = new Sales(MinuteBucketsProvider.createBuckets(), new SalesAmountBucket());
         SalesService salesService = new SalesService(sales);
         SalesAmountBucket otherBucket = new SalesAmountBucket();
 
